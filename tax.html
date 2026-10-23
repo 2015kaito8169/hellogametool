@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<a href=index.html>TOP</a>&gt<a href=tool.html>TOOL</a>&gt<p>消費税</p>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>消費税安くなれ計算機</title>
+</head>
+<body>
+
+    <h1>消費税が安くなったらどんだけ楽になるのか！</h1>
+
+    <form id="tax-form">
+        <p><strong>1. 一回の買い物にかかるお金を入力</strong></p>
+        <input type="number" id="money" placeholder="例: 3000"> 円
+
+        <p><strong>2. 買い物頻度</strong></p>
+        <label><input type="radio" name="freq" value="365" checked> 毎日</label>
+        <label><input type="radio" name="freq" value="104"> 週2回</label>
+        <label><input type="radio" name="freq" value="52"> 週1回</label>
+        <label><input type="radio" name="freq" value="12"> 月1回</label>
+
+        <p><strong>3. 今の税率</strong></p>
+        <label><input type="radio" name="current_rate" value="0.1" checked> 10%</label>
+        <label><input type="radio" name="current_rate" value="0.08"> 8%</label>
+
+        <p><strong>4. 理想の税率（もし安くなったら…）</strong></p>
+        <label><input type="radio" name="new_rate" value="0.09"> 9%</label>
+        <label><input type="radio" name="new_rate" value="0.08"> 8%</label>
+        <label><input type="radio" name="new_rate" value="0.07"> 7%</label>
+        <label><input type="radio" name="new_rate" value="0.06"> 6%</label>
+        <label><input type="radio" name="new_rate" value="0.05"> 5%</label>
+        <label><input type="radio" name="new_rate" value="0.04"> 4%</label>
+        <label><input type="radio" name="new_rate" value="0.03"> 3%</label>
+        <label><input type="radio" name="new_rate" value="0.02"> 2%</label>
+        <label><input type="radio" name="new_rate" value="0.01"> 1%</label>
+        <label><input type="radio" name="new_rate" value="0"> 0%</label>
+
+        <br><br>
+        <button type="button" onclick="calc()">節約額をチェック！</button>
+    </form>
+
+    <hr>
+    <div id="result">
+        <p>計算結果がここに出ます</p>
+    </div>
+
+    <script>
+        function calc() {
+            const money = Number(document.getElementById('money').value);
+            const freqSelect = document.querySelector('input[name="freq"]:checked');
+            const currentSelect = document.querySelector('input[name="current_rate"]:checked');
+            const idealSelect = document.querySelector('input[name="new_rate"]:checked');
+
+            if (!money || !idealSelect) {
+                alert("金額を入力してね。");
+                return;
+            }
+
+            const timesPerYear = Number(freqSelect.value);
+            const oldRate = Number(currentSelect.value);
+            const newRate = Number(idealSelect.value);
+
+            const savingYear = Math.floor(((money * oldRate) - (money * newRate)) * timesPerYear);
+            const savingMonth = Math.floor(savingYear / 12);
+
+            // 1ヶ月で何ができるか
+            let monthCanDo = "";
+            if (savingMonth <= 0) monthCanDo = "何も買えません（無）";
+            else if (savingMonth < 150) monthCanDo = "コンビニのチロルチョコ1個買えます";
+            else if (savingMonth < 1000) monthCanDo = "豪華なデザートが1回食べられます";
+            else if (savingMonth < 5000) monthCanDo = "ちょっと良い焼肉ランチに行けます";
+            else monthCanDo = "毎月のサブスク代がタダになります";
+
+            // 1年で何ができるか
+            let yearCanDo = "";
+            if (savingYear <= 10) yearCanDo = "道端で10円拾うほうがマシです";
+            else if (savingYear < 1000) yearCanDo = "近所のスーパーでお惣菜パーティーできます";
+            else if (savingYear < 10000) yearCanDo = "欲しかったあのゲームソフトが買えます";
+            else if (savingYear < 100000) yearCanDo = "国内旅行で温泉に浸かってこれます";
+            else yearCanDo = "最新のiPhoneか高級家電が買えます！";
+
+            document.getElementById('result').innerHTML = `
+                <h3>【計算結果】</h3>
+                <p>1ヶ月で <strong>約${savingMonth.toLocaleString()}円</strong> お得！</p>
+                <p>⇒ 1ヶ月で <strong>${monthCanDo}</strong></p>
+                
+                <p style="font-size: 1.2em; color: red;">1年間で <strong>約${savingYear.toLocaleString()}円</strong> お得！</p>
+                <p>⇒ 1年で <strong>${yearCanDo}</strong></p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
